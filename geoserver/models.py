@@ -18,11 +18,11 @@ class ShapeFile(models.Model):
 		return self.name
 
 class Instance(models.Model):
-	name = models.CharField(primary_key=True, max_length=64, editable=False, blank=True, default=uuid4)
+	id = models.CharField(primary_key=True, max_length=64, editable=False, blank=True, default=uuid4)
 	fid = models.IntegerField()
 	shapefile = models.ForeignKey(ShapeFile, related_name = "instances")
 	position = geomodels.GeometryField()
-	objects = models.GeoManager()
+	objects = geomodels.GeoManager()
 	
 	def save(self, *args, **kwargs):
 		if SpatialReference(self.shapefile.srs) != SpatialReference(4326):
@@ -31,7 +31,7 @@ class Instance(models.Model):
 		super(Instance, self).save(*args, **kwargs)
 
 	def __unicode__(self):
-		return self.shapefile + " - " + str(self.fid)
+		return str(self.shapefile) + " - " + str(self.fid)
 
 class Column(models.Model):
 	instance = models.ForeignKey(Instance, related_name = "columns")

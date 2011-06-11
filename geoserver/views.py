@@ -1,6 +1,8 @@
 from geoserver.models import *
 from django.shortcuts import render_to_response 
 from django.http import *
+from django.core.urlresolvers import reverse
+
 try:
 	import json
 exept:
@@ -48,3 +50,18 @@ def render_json(layer):
 	}
 
 	reurn HttpResponse(json.dumps(data), mimetype = "text/json")
+
+def shapes(request):
+	shps = [{
+		"name" : shape.name,
+		"json" : reverse('get_json', kwargs={"schema" : shape.slug}),
+		"kml" : reverse('get_kml', kwargs={"schema" : shape.slug}),
+		"kmz" : reverse('get_kmz', kwargs={"schema" : shape.slug}),
+		"shp" : reverse('get_shp', kwargs={"schema" : shape.slug}),
+		"mif" : reverse('get_mif', kwargs={"schema" : shape.slug}),
+		"gml" : reverse('get_gml', kwargs={"schema" : shape.slug}),
+	} for shape in ShapeFile.objects.all()]
+	return HttpResponse(json.dumps(shps), mimetype = "test/json")	
+
+def map(request):
+	return render_to_response('map.html')
