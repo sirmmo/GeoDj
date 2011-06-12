@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 
 try:
 	import json
-exept:
+except:
 	import simplejson as json
 
 def get(request, shape, format="base"):
@@ -16,7 +16,7 @@ def get(request, shape, format="base"):
 	layer = {
 		'layer_name':s.name,
 		'srs':s.srs,
-		'fields':[a.name for a in Column.objects.filter(instance__shapefile = s).distinct()]
+		'fields':[a.name for a in Column.objects.filter(instance__shapefile = s).distinct()],
 		'feats':[],
 		'feats_dict':{}
 	}
@@ -39,17 +39,18 @@ def get(request, shape, format="base"):
 	elif format == "shp":
 		return render_shp(layer)
 
+
 def render_json(layer):
 	data = {
 		'type':'FeatureCollection',
 		'features':[{
 			"type": "Feature",
 			'geometry' : json.loads(feat['position'].json),
-			'properties':feat['feats_dict']
-		} for feat in layer['feats']]
+			'properties':feat['feats_dict'],
+		} for feat in layer['feats']],
 	}
-
-	reurn HttpResponse(json.dumps(data), mimetype = "text/json")
+	
+	return HttpResponse(json.dumps(data), mimetype = "text/json")
 
 def shapes(request):
 	shps = [{
@@ -64,4 +65,11 @@ def shapes(request):
 	return HttpResponse(json.dumps(shps), mimetype = "test/json")	
 
 def map(request):
-	return render_to_response('map.html')
+	return render_to_response('map.html', {'shapes_url':reverse('shapes')})
+
+def add_shape(request):
+	if request.method == "GET":
+		return render_to_response('form.html')
+	elif request.method == "POST":
+		#save the files
+		return HttpResponseRedirect(reverse('map))

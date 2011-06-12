@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<title>GeoDj Map Viewer</title>
+		<script src="http://openlayers.org/api/2.10/OpenLayers.js"> </script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<style>
+
+body{margin:0 0 0 0;}
+#header{height:100px; width:100%; display:block;}
+#content{width:100%; display:block;}
+#footer{height:20px; background-color:white; border-top: darkgrey;}
+.sidebar{width:150px; background-color:white;}
+.left{float:left;}
+.right{float:right;}
+
+		</style>
+<script>
+$('.layer').click(function(){
+	
+});
+
+$(function(){
+	$('#details_bar').hide();
+	$.getJSON('{{shapes_url}}', function(data){
+		
+	});
+
+});
+</script>
+	</head>
+	<body>
+		<div id="header"></div>
+		<div id="content">
+			<div id="layers_bar" class="sidebar left">
+				<div class="title">
+				Layers
+				</div>
+				<ul id="layers">
+				</ul>
+			</div>
+			<div id="map"></div>
+			<div id="details_bar" class="sidebar right">
+				<div class="title">
+				</div>
+				<ul id="details">
+				</ul>
+			</div>
+		</div>
+		<div id="footer">Map offered by GeoDj</div>
+	</body>
+</html>
